@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Example
+namespace BoveeBot
 {
     class Program
     {

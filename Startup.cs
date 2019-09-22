@@ -6,7 +6,7 @@ using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Example
+namespace BoveeBot
 {
     public class Startup
     {

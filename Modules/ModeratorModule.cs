@@ -3,7 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using System.Threading.Tasks;
 
-namespace Example.Modules
+namespace BoveeBot.Modules
 {
     [Name("Moderator")]
     [RequireContext(ContextType.Guild)]

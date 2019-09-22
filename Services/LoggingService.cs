@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Example
+namespace BoveeBot
 {
     public class LoggingService
     {
