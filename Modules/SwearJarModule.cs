@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -50,6 +51,12 @@ namespace BoveeBot.Modules
         [Summary("List all currently recognized swears")]
         public async Task ListSwearsAsync()
         {
+            List<string> allswears = DataStorage.GetAllSwears();
+            if ((allswears == null) || (allswears.Count == 0))
+            {
+                await ReplyAsync("There are currently no recognized swears");
+                return;
+            }
             string prefix = _config["prefix"];
             var builder = new EmbedBuilder()
             {
@@ -57,7 +64,7 @@ namespace BoveeBot.Modules
             };
             builder.AddField(x => {
                 x.Name = "Recognized swears";
-                x.Value = string.Join("\n", DataStorage.GetAllSwears());
+                x.Value = string.Join("\n", allswears);
                 x.IsInline = false;
             });
             await ReplyAsync("", false, builder.Build());
