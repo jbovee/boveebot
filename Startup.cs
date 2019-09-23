@@ -4,6 +4,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BoveeBot
@@ -16,7 +17,7 @@ namespace BoveeBot
         {
             var builder = new ConfigurationBuilder()        // Create a new instance of the config builder
                 .SetBasePath(AppContext.BaseDirectory)      // Specify the default location for the config file
-                .AddYamlFile("_config.yml");                // Add this (yaml encoded) file to the configuration
+                .AddJsonFile("_config.json");                // Add this (json encoded) file to the configuration
             Configuration = builder.Build();                // Build the configuration
         }
 
