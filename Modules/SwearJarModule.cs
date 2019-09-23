@@ -12,6 +12,11 @@ namespace BoveeBot.Modules
         [Summary("Add a swear to be recognized by the bot")]
         public async Task AddSwearAsync(string swear)
         {
+            if (swear.Length < 3 || swear.Length > 12)
+            {
+                await ReplyAsync("Swears must be between three and twelve characters long");
+                return;
+            }
             if (DataStorage.AddSwear(swear.ToLower()))
             {
                 await ReplyAsync($"{swear} is now a bad word");
