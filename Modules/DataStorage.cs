@@ -64,10 +64,28 @@ namespace BoveeBot
             return true;
         }
 
-        public static void AddSwear(string swear)
+        public static bool AddSwear(string swear)
         {
-            _store.swearstore.swears.Add(swear);
-            SaveData();
+            if (_store.swearstore.swears.Contains(swear))
+            {
+                return false;
+            } else {
+                _store.swearstore.swears.Add(swear);
+                SaveData();
+                return true;
+            }
+        }
+
+        public static bool DelSwear(string swear)
+        {
+            if (_store.swearstore.swears.Contains(swear))
+            {
+                _store.swearstore.swears.Remove(swear);
+                SaveData();
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }
