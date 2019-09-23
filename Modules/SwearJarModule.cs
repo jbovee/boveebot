@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BoveeBot.Modules
 {
-    [Group("swearjar"), Name("SwearJar")]
+    [Group("swearjar"), Alias("sj"), Name("SwearJar")]
     public class SwearJar : ModuleBase<SocketCommandContext>
     {
         [Command("-add")]
