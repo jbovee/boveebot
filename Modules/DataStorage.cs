@@ -87,5 +87,10 @@ namespace BoveeBot
                 return false;
             }
         }
+
+        public static List<string> GetAllSwears()
+        {
+            return _store.swearstore.swears.ToList();
+        }
     }
 }
