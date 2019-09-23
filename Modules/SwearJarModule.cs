@@ -8,7 +8,7 @@ namespace BoveeBot.Modules
     [Group("swearjar"), Name("SwearJar")]
     public class SwearJar : ModuleBase<SocketCommandContext>
     {
-        [Command("add")]
+        [Command("-add")]
         [Summary("Add a swear to be recognized by the bot")]
         public async Task AddSwearAsync(string swear)
         {
@@ -20,7 +20,7 @@ namespace BoveeBot.Modules
             }
         }
 
-        [Command("del")]
+        [Command("-del")]
         [Summary("Remove a swear from the list of recognized swears")]
         public async Task DelSwearAsync(string swear)
         {
