@@ -12,7 +12,7 @@ namespace BoveeBot
     {
         public class SwearStorage
         {
-            public HashSet<string> swears = new HashSet<string>();
+            public SortedSet<string> swears = new SortedSet<string>();
         }
         public class Storage
         {
