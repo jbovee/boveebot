@@ -34,7 +34,7 @@ namespace BoveeBot
         public bool IsCommandOrBot(SocketUserMessage msg, string prefix, out int argPos)
         {
             argPos = 0;
-            if (msg.Author.Id == _discord.CurrentUser.Id) return true; // Ignore self
+            if ((msg.Author.Id == _discord.CurrentUser.Id) || msg.Author.IsBot) return true;
             bool hasStringPrefix = prefix == null ? false : msg.HasStringPrefix(prefix, ref argPos);
             return (hasStringPrefix || msg.HasMentionPrefix(_discord.CurrentUser, ref argPos));
         }
