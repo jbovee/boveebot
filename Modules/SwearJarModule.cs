@@ -39,6 +39,12 @@ namespace BoveeBot.Modules
                 await ReplyAsync("Swears must be between three and twelve characters long");
                 return;
             }
+            bool validadd = new Regex(@"^(<?valid>[^'-][\w]+((-|')[\w]+)?)$", RegexOptions.Compiled | RegexOptions.IgnoreCase).Match(swear).Success;
+            if (!validadd)
+            {
+                await ReplyAsync("Swears must only be letters with a single hyphen or apostrophe within them");
+                return;
+            }
             if (DataStorage.AddSwear(swear.ToLower()))
             {
                 await ReplyAsync($"{swear} is now a bad word");
