@@ -56,6 +56,30 @@ namespace BoveeBot.Modules
             }
         }
 
+        [Command("-add")]
+        [Summary("Add multiple swears to the bot at once")]
+        public async Task AddSwearBatchAsync(params string[] swears)
+        {
+            if (swears.Length > 5)
+            {
+                await ReplyAsync("You may only add up to five words at a time");
+                return;
+            }
+            foreach (var swear in swears)
+            {
+                if (!IsValid(swear)) await ReplyAsync($"{swear} {validateMsg}");
+                else
+                {
+                    if (DataStorage.AddSwear(swear.ToLower()))
+                    {
+                        await ReplyAsync($"{swear} is now a bad word");
+                    } else {
+                        await ReplyAsync($"{swear} is already a bad word");
+                    }
+                }
+            }
+        }
+
         [Command("-del")]
         [Summary("Remove a swear from the list of recognized swears")]
         public async Task DelSwearAsync(string swear)
@@ -65,6 +89,26 @@ namespace BoveeBot.Modules
                 await ReplyAsync($"{swear} is no longer a bad word");
             } else {
                 await ReplyAsync($"{swear} is not currently a bad word");
+            }
+        }
+
+        [Command("-del")]
+        [Summary("Remove multiple swears from the bot at once")]
+        public async Task DelSwearBatchAsync(params string[] swears)
+        {
+            if (swears.Length > 5)
+            {
+                await ReplyAsync("You may only delete up to five words at a time");
+                return;
+            }
+            foreach (var swear in swears)
+            {
+                if (DataStorage.DelSwear(swear.ToLower()))
+                {
+                    await ReplyAsync($"{swear} is no longer a bad word");
+                } else {
+                    await ReplyAsync($"{swear} is not currently a bad word");
+                }
             }
         }
 
