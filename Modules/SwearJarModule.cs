@@ -28,32 +28,6 @@ namespace BoveeBot.Modules
             _commands = commands;
             _config = config;
             _provider = provider;
-
-            _discord.MessageReceived += MessageReceivedAsync;
-        }
-
-        private async Task MessageReceivedAsync(SocketMessage message)
-        {
-            var msg = message as SocketUserMessage;     // Ensure the message is from a user/bot
-            if (msg == null) return;
-            if (msg.Author.Id == _discord.CurrentUser.Id) return;     // Ignore self when checking commands
-
-            List<string> allswears = DataStorage.GetAllSwears();
-            string rxstring = @"\b(?<swear>" + string.Join("|", allswears) + @")(?:s|es|ed|er|ing|ting)?\b";
-            Regex rx = new Regex(rxstring, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            var swearlist = rx.Matches(msg.Content)
-                .OfType<Match>()
-                .Select (m => m.Groups[1].Value)
-                .Distinct()
-                .OrderBy(s => s);
-            
-            int len = swearlist.Count();
-            string said = "";
-            if (len < 1) return;
-            if (len == 1) said = swearlist.FirstOrDefault();
-            else if (len == 2) said = string.Join(" and ", swearlist);
-            else said = string.Join(", ", swearlist.Take(len - 1)) + ", and " + swearlist.LastOrDefault();
-            await msg.Channel.SendMessageAsync($"{msg.Author.Username}, how could you say {said}!");
         }
 
         [Command("-add")]
