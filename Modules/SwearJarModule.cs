@@ -40,6 +40,7 @@ namespace BoveeBot.Modules
         }
 
         [Command("-add")]
+        [Alias("-a")]
         [Summary("Add a swear to be recognized by the bot")]
         public async Task AddSwearAsync(string swear)
         {
@@ -57,6 +58,7 @@ namespace BoveeBot.Modules
         }
 
         [Command("-add")]
+        [Alias("-a")]
         [Summary("Add multiple swears to the bot at once")]
         public async Task AddSwearBatchAsync(params string[] swears)
         {
@@ -81,6 +83,7 @@ namespace BoveeBot.Modules
         }
 
         [Command("-del")]
+        [Alias("-d")]
         [Summary("Remove a swear from the list of recognized swears")]
         public async Task DelSwearAsync(string swear)
         {
@@ -93,6 +96,7 @@ namespace BoveeBot.Modules
         }
 
         [Command("-del")]
+        [Alias("-d")]
         [Summary("Remove multiple swears from the bot at once")]
         public async Task DelSwearBatchAsync(params string[] swears)
         {
