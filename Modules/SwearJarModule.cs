@@ -41,25 +41,7 @@ namespace BoveeBot.Modules
 
         [Command("-add")]
         [Alias("-a")]
-        [Summary("Add a swear to be recognized by the bot")]
-        public async Task AddSwearAsync(string swear)
-        {
-            if (!IsValid(swear))
-            {
-                await ReplyAsync($"{swear} {validateMsg}");
-                return;
-            }
-            if (DataStorage.AddSwear(swear.ToLower()))
-            {
-                await ReplyAsync($"{swear} is now a bad word");
-            } else {
-                await ReplyAsync($"{swear} is already a bad word");
-            }
-        }
-
-        [Command("-add")]
-        [Alias("-a")]
-        [Summary("Add multiple swears to the bot at once")]
+        [Summary("Add one to five swears to the bot")]
         public async Task AddSwearBatchAsync(params string[] swears)
         {
             if (swears.Length > 5)
@@ -84,20 +66,7 @@ namespace BoveeBot.Modules
 
         [Command("-del")]
         [Alias("-d")]
-        [Summary("Remove a swear from the list of recognized swears")]
-        public async Task DelSwearAsync(string swear)
-        {
-            if (DataStorage.DelSwear(swear.ToLower()))
-            {
-                await ReplyAsync($"{swear} is no longer a bad word");
-            } else {
-                await ReplyAsync($"{swear} is not currently a bad word");
-            }
-        }
-
-        [Command("-del")]
-        [Alias("-d")]
-        [Summary("Remove multiple swears from the bot at once")]
+        [Summary("Delete one to five swears from the bot")]
         public async Task DelSwearBatchAsync(params string[] swears)
         {
             if (swears.Length > 5)
