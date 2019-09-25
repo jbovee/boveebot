@@ -17,6 +17,7 @@ namespace BoveeBot.Modules
         private readonly CommandService _commands;
         private readonly IConfigurationRoot _config;
         private readonly IServiceProvider _provider;
+        private static string validateMsg = "does not match format requirements:\n\t- Between 3 and 12 characters\n\t- Using only letters with a single hyphen or apostrophe within them";
 
         public SwearJar(
             DiscordSocketClient discord,
@@ -28,21 +29,23 @@ namespace BoveeBot.Modules
             _commands = commands;
             _config = config;
             _provider = provider;
+
+        }
+
+        private bool IsValid(string swear)
+        {
+            bool validadd = new Regex(@"^([^'-][\w]+((-|')[\w]+)?)$", RegexOptions.Compiled | RegexOptions.IgnoreCase).Match(swear).Success;
+            if (swear.Length < 3 || swear.Length > 12 || !validadd) return false;
+            return true;
         }
 
         [Command("-add")]
         [Summary("Add a swear to be recognized by the bot")]
         public async Task AddSwearAsync(string swear)
         {
-            if (swear.Length < 3 || swear.Length > 12)
+            if (!IsValid(swear))
             {
-                await ReplyAsync("Swears must be between three and twelve characters long");
-                return;
-            }
-            bool validadd = new Regex(@"^([^'-][\w]+((-|')[\w]+)?)$", RegexOptions.Compiled | RegexOptions.IgnoreCase).Match(swear).Success;
-            if (!validadd)
-            {
-                await ReplyAsync("Swears must only be letters with a single hyphen or apostrophe within them");
+                await ReplyAsync($"{swear} {validateMsg}");
                 return;
             }
             if (DataStorage.AddSwear(swear.ToLower()))
