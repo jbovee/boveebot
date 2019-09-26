@@ -7,6 +7,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using BoveeBot.Core;
 
 namespace BoveeBot
 {
@@ -44,9 +45,10 @@ namespace BoveeBot
             if (!(s is SocketUserMessage msg)) return;
 
             string prefix = _config["prefix"];
-            
+
             if (!IsCommandOrBot(msg, prefix, out int argPos))
             {
+                User usr = Users.GetOrCreateUser(msg.Author);
                 List<string> allswears = DataStorage.GetAllSwears();
                 if ((allswears == null) || (allswears.Count() == 0)) return;
                 string rxstring = "(?:\\b|^)(?<swear>" + string.Join("|", allswears) + ")(?:\\s|$)";
@@ -60,6 +62,11 @@ namespace BoveeBot
                 int len = swearlist.Count();
                 string said = "";
                 if (len < 1) return;
+                foreach (var swear in swearlist)
+                {
+                    Users.AddOrIncrementUsed(usr, swear);
+                    Users.IncrementOwed(usr);
+                }
                 if (len == 1) said = swearlist.FirstOrDefault();
                 else if (len == 2) said = string.Join(" and ", swearlist);
                 else said = string.Join(", ", swearlist.Take(len - 1)) + ", and " + swearlist.LastOrDefault();

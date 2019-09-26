@@ -7,6 +7,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using BoveeBot.Core;
 
 namespace BoveeBot.Modules
 {
@@ -83,6 +84,14 @@ namespace BoveeBot.Modules
                     await ReplyAsync($"{swear} is not currently a bad word");
                 }
             }
+        }
+
+        [Command("-owed")]
+        [Summary("Show how much the user owes")]
+        public async Task GetUserOwed()
+        {
+            User sender = Users.GetOrCreateUser(Context.User);
+            await ReplyAsync($"You owe ${sender.Owed} to the swear jar");
         }
 
         [Command("-list")]
