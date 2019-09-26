@@ -35,7 +35,7 @@ namespace BoveeBot.Modules
 
         private bool IsValid(string swear)
         {
-            bool validadd = new Regex(@"^([^'-][\w]+((-|')[\w]+)?)$", RegexOptions.Compiled | RegexOptions.IgnoreCase).Match(swear).Success;
+            bool validadd = new Regex(@"^([\w]+((-|')[\w]+)?)$", RegexOptions.Compiled | RegexOptions.IgnoreCase).Match(swear).Success;
             if (swear.Length < 3 || swear.Length > 12 || !validadd) return false;
             return true;
         }
