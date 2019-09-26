@@ -117,5 +117,32 @@ namespace BoveeBot.Modules
             });
             await ReplyAsync("", false, builder.Build());
         }
+
+        [Command("-used")]
+        [Alias("-u")]
+        [Summary("Show how many times a user has used each swear")]
+        public async Task GetUserUsed()
+        {
+            User sender = Users.GetOrCreateUser(Context.User);
+            var builder = new EmbedBuilder()
+            {
+                Color = new Color(114, 137, 218),
+            };
+
+            string swears = "";
+            foreach (var swear in sender.Used)
+            {
+                swears += $"{swear.Key}: {swear.Value}\n";
+            }
+
+            builder.AddField(x =>
+            {
+                x.Name = "Your naughty vocabulary";
+                x.Value = swears;
+                x.IsInline = false;
+            });
+
+            await ReplyAsync("", false, builder.Build());
+        }
     }
 }
