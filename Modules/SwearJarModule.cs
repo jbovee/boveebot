@@ -106,16 +106,12 @@ namespace BoveeBot.Modules
                 return;
             }
             string prefix = _config["prefix"];
-            var builder = new EmbedBuilder()
-            {
-                Color = new Color(114, 137, 218),
-            };
-            builder.AddField(x => {
-                x.Name = "Recognized swears";
-                x.Value = string.Join("\n", allswears);
-                x.IsInline = false;
-            });
-            await ReplyAsync("", false, builder.Build());
+            var builder = new EmbedBuilder();
+            builder.AddField("Recognized swears",
+                string.Join("\n", allswears))
+                .WithColor(new Color(114, 137, 218));
+
+            await ReplyAsync(embed: builder.Build());
         }
 
         [Command("-used")]
@@ -124,25 +120,18 @@ namespace BoveeBot.Modules
         public async Task GetUserUsed()
         {
             User sender = Users.GetOrCreateUser(Context.User);
-            var builder = new EmbedBuilder()
-            {
-                Color = new Color(114, 137, 218),
-            };
-
             string swears = "";
             foreach (var swear in sender.Used)
             {
                 swears += $"{swear.Key}: {swear.Value}\n";
             }
 
-            builder.AddField(x =>
-            {
-                x.Name = "Your naughty vocabulary";
-                x.Value = swears;
-                x.IsInline = false;
-            });
+            var builder = new EmbedBuilder();
+            builder.AddField("Your naughty vocabulary",
+                swears)
+                .WithColor(new Color(114, 137, 218));
 
-            await ReplyAsync("", false, builder.Build());
+            await ReplyAsync(embed: builder.Build());
         }
     }
 }
