@@ -56,10 +56,10 @@ namespace BoveeBot
                 var swearlist = rx.Matches(msg.Content)
                     .OfType<Match>()
                     .Select (m => m.Groups[1].Value)
-                    .Distinct()
                     .OrderBy(n => n);
                 
-                int len = swearlist.Count();
+                var swearlistdistinct = swearlist.Distinct();
+                int len = swearlistdistinct.Count();
                 string said = "";
                 if (len < 1) return;
                 foreach (var swear in swearlist)
@@ -67,9 +67,9 @@ namespace BoveeBot
                     Users.AddOrIncrementUsed(usr, swear);
                     Users.IncrementOwed(usr);
                 }
-                if (len == 1) said = swearlist.FirstOrDefault();
-                else if (len == 2) said = string.Join(" and ", swearlist);
-                else said = string.Join(", ", swearlist.Take(len - 1)) + ", and " + swearlist.LastOrDefault();
+                if (len == 1) said = swearlistdistinct.FirstOrDefault();
+                else if (len == 2) said = string.Join(" and ", swearlistdistinct);
+                else said = string.Join(", ", swearlistdistinct.Take(len - 1)) + ", and " + swearlistdistinct.LastOrDefault();
 
                 await msg.Channel.SendMessageAsync($"{msg.Author.Username}, how could you say {said}!");
             }
