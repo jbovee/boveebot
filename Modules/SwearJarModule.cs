@@ -92,7 +92,7 @@ namespace BoveeBot.Modules
         public async Task GetUserOwed()
         {
             User sender = Users.GetOrCreateUser(Context.User);
-            await ReplyAsync($"You owe ${sender.Owed} to the swear jar");
+            await ReplyAsync($"{Context.User.Username}, you owe ${sender.Owed} to the swear jar");
         }
 
         [Command("-list")]
