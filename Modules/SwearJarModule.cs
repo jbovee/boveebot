@@ -87,6 +87,7 @@ namespace BoveeBot.Modules
         }
 
         [Command("-owed")]
+        [Alias("-o")]
         [Summary("Show how much the user owes")]
         public async Task GetUserOwed()
         {
