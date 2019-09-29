@@ -1,8 +1,10 @@
 ﻿using Discord;
 using Discord.Commands;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace BoveeBot.Modules
 {
@@ -17,10 +19,37 @@ namespace BoveeBot.Modules
             _config = config;
         }
 
+        private string GetAliases(IEnumerable<string> commands)
+        {
+            // swearjar -add, swearjar -a, sj -add, sj -a
+            // swearjar -list, swearjar -ls, swearjar l, sj -list, sj -ls, sj l
+            string prefix = _config["prefix"];
+            string subfix = _config["subfix"];
+            int cmdlen = commands.FirstOrDefault().Split(" ").Length;
+            List<HashSet<string>> results = new List<HashSet<string>>();
+            for (int i = 0; i < cmdlen; i++) results.Add(new HashSet<string>());
+            foreach (var cmd in commands)
+            {
+                var split = cmd.Split(" ");
+                for (int i = 0; i < split.Length; i++)
+                {
+                    if (split[i].Substring(0,1) == subfix) results[i].Add(split[i].Substring(1));
+                    else results[i].Add(split[i]);
+                }
+            }
+            // ~(swearjar|sj) -(add|a)
+            List<string> result = new List<string>();
+            for (int j = 0; j < results.Count; j++)
+            {
+                if (j == 0) result.Add(results[j].Count > 1 ? $"\\{prefix}({string.Join("|", results[j])})" : $"\\{prefix}{results[j].FirstOrDefault()}");
+                else result.Add(results[j].Count > 1 ? $"\\{subfix}({string.Join("|", results[j])})" : $"\\{subfix}{results[j].FirstOrDefault()}");
+            }
+            return string.Join(" ", result);
+        }
+
         [Command("help")]
         public async Task HelpAsync()
         {
-            string prefix = _config["prefix"];
             var builder = new EmbedBuilder()
             {
                 Color = new Color(114, 137, 218),
@@ -29,20 +58,25 @@ namespace BoveeBot.Modules
             
             foreach (var module in _service.Modules)
             {
-                string description = null;
+                List<string> description = new List<string>();
                 foreach (var cmd in module.Commands)
                 {
                     var result = await cmd.CheckPreconditionsAsync(Context);
-                    if (result.IsSuccess)
-                        description += $"{prefix}{cmd.Aliases.First()}\n";
+                    if (result.IsSuccess) description.Add($"{GetAliases(cmd.Aliases)}");
+                    foreach (var param in cmd.Parameters)
+                    {
+                        description.Add(param.Summary);
+                    }
+                    description.Add("\n");
                 }
+                string output = string.Join(" ", description);
                 
-                if (!string.IsNullOrWhiteSpace(description))
+                if (!string.IsNullOrWhiteSpace(output))
                 {
                     builder.AddField(x =>
                     {
                         x.Name = module.Name;
-                        x.Value = description;
+                        x.Value = output;
                         x.IsInline = false;
                     });
                 }

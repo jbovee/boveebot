@@ -43,7 +43,7 @@ namespace BoveeBot.Modules
         [Command("-add")]
         [Alias("-a")]
         [Summary("Add one to five swears to the bot")]
-        public async Task AddSwearBatchAsync(params string[] swears)
+        public async Task AddSwearBatchAsync([Summary("<string>{1,5}")]params string[] swears)
         {
             if (swears.Length > 5)
             {
@@ -68,7 +68,7 @@ namespace BoveeBot.Modules
         [Command("-del")]
         [Alias("-d")]
         [Summary("Delete one to five swears from the bot")]
-        public async Task DelSwearBatchAsync(params string[] swears)
+        public async Task DelSwearBatchAsync([Summary("<string>{1,5}")]params string[] swears)
         {
             if (swears.Length > 5)
             {
