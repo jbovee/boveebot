@@ -35,6 +35,8 @@ namespace BoveeBot.Core
             return pickuser;
         }
 
+        public static List<User> GetAllUsers() => users;
+
         private static User CreateUser(ulong id)
         {
             var newUser = new User()
