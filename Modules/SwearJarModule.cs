@@ -54,7 +54,7 @@ namespace BoveeBot.Modules
             {
                 builder.AddField(x => {
                     x.Name = string.Format("{0} - {1}", user.Username, user.Owed == max ? $"**${user.Owed}**" : user.Owed == min ? $"*${user.Owed}*" : $"${user.Owed}");
-                    x.Value = $"{string.Join(", ", user.Used.Select(u => String.Format("{0}: {1}", u.Key, u.Value)))}";
+                    x.Value = $"{string.Join(", ", user.Used.OrderByDescending(swear => swear.Value).Select(u => String.Format("{0}: {1}", u.Key, u.Value)))}";
                     x.IsInline = false;
                 });
             }
