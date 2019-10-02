@@ -42,6 +42,7 @@ namespace BoveeBot.Core
             var newUser = new User()
             {
                 Id = id,
+                Username = "",
                 Owed = 0,
                 Used = new Dictionary<string, uint>()
             };

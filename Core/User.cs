@@ -9,6 +9,7 @@ namespace BoveeBot.Core
     public class User
     {
         public ulong Id;
+        public string Username;
         public uint Owed;
         public Dictionary<string, uint> Used;
     }

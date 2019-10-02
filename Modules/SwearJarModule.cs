@@ -37,16 +37,24 @@ namespace BoveeBot.Modules
         public async Task ShowSwearjar()
         {
             List<User> users = Users.GetAllUsers();
+            uint max = 0; uint min = uint.MaxValue;
             var builder = new EmbedBuilder()
             {
                 Color = new Color(114, 137, 218),
             };
+            for (int u = 0; u < users.Count(); u++)
+            {
+                users[u].Username = _discord.GetUser(users[u].Id).Username;
+                if (users[u].Owed > max) max = users[u].Owed;
+                if (users[u].Owed < min) min = users[u].Owed;
+            }
+            users = users.OrderBy(user => user.Username).ToList();
+            if (min == uint.MaxValue) min = 0;
             foreach (var user in users)
             {
-                var username = _discord.GetUser(user.Id).Username;
                 builder.AddField(x => {
-                    x.Name = username;
-                    x.Value = $"__Owed__ ${user.Owed}\t__Used__ {string.Join(", ", user.Used.Select(u => String.Format("{0}: {1}", u.Key, u.Value)))}";
+                    x.Name = string.Format("{0} - {1}", user.Username, user.Owed == max ? $"**${user.Owed}**" : user.Owed == min ? $"*${user.Owed}*" : $"${user.Owed}");
+                    x.Value = $"{string.Join(", ", user.Used.Select(u => String.Format("{0}: {1}", u.Key, u.Value)))}";
                     x.IsInline = false;
                 });
             }
