@@ -17,7 +17,8 @@ namespace BoveeBot
         {
             var builder = new ConfigurationBuilder()        // Create a new instance of the config builder
                 .SetBasePath(AppContext.BaseDirectory)      // Specify the default location for the config file
-                .AddJsonFile("_config.json");                // Add this (json encoded) file to the configuration
+                .AddJsonFile("_config.json")                // Add this (json encoded) file to the configuration
+                .AddJsonFile("_tokens.json");
             Configuration = builder.Build();                // Build the configuration
         }
 

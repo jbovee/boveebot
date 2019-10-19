@@ -1,7 +1,4 @@
 {
     "prefix": "~",
-    "subfix": "-",
-    "tokens": {
-        "discord": "***REMOVED***"
-    }
+    "subfix": "-"
 }
