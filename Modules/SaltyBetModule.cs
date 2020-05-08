@@ -85,19 +85,20 @@ namespace BoveeBot.Modules
             });
             if (!String.Equals(currentMode, "Tournament"))
             {
+                var minutesLeft = matchNums * 2.7;
                 builder.AddField(x => {
                     x.Name = "Approximate time before next tournament";
-                    x.Value = secondsToTime(matchNums * 2.7 * 60);
+                    x.Value = String.Format("{0} -> {1}", minutesToApproxHrMin(minutesLeft), DateTime.Now.AddMinutes(minutesLeft).ToString("h:mm tt"));
                 });
             }
             
             await ReplyAsync("", false, builder.Build());
         }
 
-        private String secondsToTime(double seconds)
+        private String minutesToApproxHrMin(double minutes)
         {
-            var h = Math.Floor(seconds / 3600);
-            var m = Math.Floor((seconds - (h * 3600)) / 60);
+            var h = Math.Floor(minutes / 60);
+            var m = minutes - (h * 60);
             if (h == 0) return String.Format("~{0}m", m);
             return String.Format("~{0}h {1}m", h, m);
         }
