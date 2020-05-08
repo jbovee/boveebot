@@ -1,4 +1,5 @@
 {
     "prefix": "~",
-    "subfix": "-"
+    "subfix": "-",
+    "avgMatchLength": 2.68
 }
