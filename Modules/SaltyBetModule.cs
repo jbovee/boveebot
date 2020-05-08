@@ -59,14 +59,17 @@ namespace BoveeBot.Modules
             var context = BrowsingContext.New(Configuration.Default);
             var document = await context.OpenAsync(req => req.Content(text));
             var modeHtml = document.QuerySelectorAll("div#compendiumleft div").LastOrDefault().InnerHtml;
+
             var modeText = Regex.Match(modeHtml, @"[^!]*").Value;
             var numsCheck = Regex.Match(modeText, @"[0-9]{1,3}");
             var matchNums = numsCheck.Success ? numsCheck.Value : "1";
-            var exhibCheck = Regex.Match(modeText, @"([0-9]{1,3} exhibition matches left|Matchmaking mode will be activated after the next exhibition match)").Success;
-            var mmCheck = Regex.Match(modeText, @"([0-9]{1,3} more matches until the next tournament|Tournament mode will be activated after the next match)").Success;
-            var tourneyCheck = Regex.Match(modeText, @"(Tournament mode start|[0-9]{1,2} characters are left in the bracket|FINAL ROUND! Stay tuned for exhibitions after the tournament)").Success;
-            if (Regex.Match(modeText, @"Tournament mode start").Success) matchNums = "16";
-            var currentMode = exhibCheck ? "Exhibitions" : mmCheck ? "Matchmaking" : tourneyCheck ? "Tournament" : "Unknown";
+
+            var exhibCheck = Regex.Match(modeText, @"([0-9]{1,3} exhibition matches left|Matchmaking mode will be activated after the next exhibition match)");
+            var mmCheck = Regex.Match(modeText, @"([0-9]{1,3} more matches until the next tournament|Tournament mode will be activated after the next match)");
+            var tourneyCheck = Regex.Match(modeText, @"((Tournament mode start)|[0-9]{1,2} characters are left in the bracket|FINAL ROUND! Stay tuned for exhibitions after the tournament)");
+
+            if (!String.IsNullOrEmpty(tourneyCheck.Groups[1].Value)) matchNums = "16";
+            var currentMode = exhibCheck.Success ? "Exhibitions" : mmCheck.Success ? "Matchmaking" : tourneyCheck.Success ? "Tournament" : "Unknown";
 
             var builder = new EmbedBuilder()
             {
