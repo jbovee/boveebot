@@ -98,7 +98,7 @@ namespace BoveeBot.Modules
         private String minutesToApproxHrMin(double minutes)
         {
             var h = Math.Floor(minutes / 60);
-            var m = minutes - (h * 60);
+            var m = Math.Floor(minutes - (h * 60));
             if (h == 0) return String.Format("~{0}m", m);
             return String.Format("~{0}h {1}m", h, m);
         }
