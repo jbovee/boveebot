@@ -1,5 +1,6 @@
 /Data
 _tokens.json
+tokens.txt
 .git.bfg-report
 
 ## Ignore Visual Studio temporary files, build results, and

@@ -8,6 +8,7 @@ namespace BoveeBot
 {
     public class CommandHandler
     {
+        private readonly DatabaseService _database;
         private readonly DiscordSocketClient _discord;
         private readonly CommandService _commands;
         private readonly IConfigurationRoot _config;
@@ -15,11 +16,13 @@ namespace BoveeBot
 
         // DiscordSocketClient, CommandService, IConfigurationRoot, and IServiceProvider are injected automatically from the IServiceProvider
         public CommandHandler(
+            DatabaseService database,
             DiscordSocketClient discord,
             CommandService commands,
             IConfigurationRoot config,
             IServiceProvider provider)
         {
+            _database = database;
             _discord = discord;
             _commands = commands;
             _config = config;

@@ -14,6 +14,7 @@ namespace BoveeBot.Modules
     [Group("swearjar"), Alias("sj"), Name("SwearJar")]
     public class SwearJar : ModuleBase<SocketCommandContext>
     {
+        private readonly DatabaseService _database;
         private readonly DiscordSocketClient _discord;
         private readonly CommandService _commands;
         private readonly IConfigurationRoot _config;
@@ -21,18 +22,20 @@ namespace BoveeBot.Modules
         private static string validateMsg = "does not match format requirements:\n\t- Between 3 and 12 characters\n\t- Using only letters with a single hyphen or apostrophe within them";
 
         public SwearJar(
+            DatabaseService database,
             DiscordSocketClient discord,
             CommandService commands,
             IConfigurationRoot config,
             IServiceProvider provider)
         {
+            _database = database;
             _discord = discord;
             _commands = commands;
             _config = config;
             _provider = provider;
-
         }
 
+        /*
         [Command]
         public async Task ShowSwearjar()
         {
@@ -61,6 +64,7 @@ namespace BoveeBot.Modules
             
             await ReplyAsync("", false, builder.Build());
         }
+        */
 
         private bool IsValid(string swear)
         {
@@ -84,7 +88,7 @@ namespace BoveeBot.Modules
                 if (!IsValid(swear)) await ReplyAsync($"{swear} {validateMsg}");
                 else
                 {
-                    if (DataStorage.AddSwear(swear.ToLower()))
+                    if (_database.AddSwear(swear))
                     {
                         await ReplyAsync($"{swear} is now a bad word");
                     } else {
@@ -106,7 +110,7 @@ namespace BoveeBot.Modules
             }
             foreach (var swear in swears)
             {
-                if (DataStorage.DelSwear(swear.ToLower()))
+                if (_database.DelSwear(swear))
                 {
                     await ReplyAsync($"{swear} is no longer a bad word");
                 } else {
@@ -115,6 +119,7 @@ namespace BoveeBot.Modules
             }
         }
 
+        /*
         [Command("-owed")]
         [Alias("-o")]
         [Summary("Show how much the user owes")]
@@ -123,13 +128,14 @@ namespace BoveeBot.Modules
             User sender = Users.GetOrCreateUser(Context.User);
             await ReplyAsync($"{Context.User.Username}, you owe ${sender.Owed} to the swear jar");
         }
+        */
 
         [Command("-list")]
         [Alias("-ls")]
         [Summary("List all currently recognized swears")]
         public async Task ListSwearsAsync()
         {
-            List<string> allswears = DataStorage.GetAllSwears();
+            List<string> allswears = _database.GetAllSwears();
             if ((allswears == null) || (allswears.Count == 0))
             {
                 await ReplyAsync("There are currently no recognized swears");
@@ -144,6 +150,7 @@ namespace BoveeBot.Modules
             await ReplyAsync(embed: builder.Build());
         }
 
+        /*
         [Command("-used")]
         [Alias("-u")]
         [Summary("Show how many times a user has used each swear")]
@@ -163,5 +170,6 @@ namespace BoveeBot.Modules
 
             await ReplyAsync(embed: builder.Build());
         }
+        */
     }
 }

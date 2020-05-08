@@ -13,25 +13,30 @@ namespace BoveeBot
 {
     public class SwearJarService
     {
+        private readonly DatabaseService _database;
         private readonly DiscordSocketClient _discord;
         private readonly CommandService _commands;
         private readonly IConfigurationRoot _config;
         private readonly IServiceProvider _provider;
+        // List<User> users;
 
         public SwearJarService(
+            DatabaseService database,
             DiscordSocketClient discord,
             CommandService commands,
             IConfigurationRoot config,
             IServiceProvider provider)
         {
+            _database = database;
             _discord = discord;
             _commands = commands;
             _config = config;
             _provider = provider;
 
-            _discord.MessageReceived += OnMessageReceivedAsync;
+            //_discord.MessageReceived += OnMessageReceivedAsync;
         }
 
+        /*
         public bool IsCommandOrBot(SocketUserMessage msg, string prefix, out int argPos)
         {
             argPos = 0;
@@ -49,7 +54,7 @@ namespace BoveeBot
             if (!IsCommandOrBot(msg, prefix, out int argPos))
             {
                 User usr = Users.GetOrCreateUser(msg.Author);
-                List<string> allswears = DataStorage.GetAllSwears();
+                List<string> allswears = _database.GetAllSwears();
                 if ((allswears == null) || (allswears.Count() == 0)) return;
                 string rxstring = "(?:\\b|^)(?<swear>" + string.Join("|", allswears) + ")(?:\\s|$)";
                 Regex rx = new Regex(rxstring, RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -74,5 +79,6 @@ namespace BoveeBot
                 await msg.Channel.SendMessageAsync($"{msg.Author.Username}, how could you say {said}!");
             }
         }
+        */
     }
 }
