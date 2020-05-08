@@ -87,7 +87,7 @@ namespace BoveeBot.Modules
             {
                 var minutesLeft = matchNums * 2.7;
                 builder.AddField(x => {
-                    x.Name = "Approximate time before next tournament";
+                    x.Name = "Approximate time before next mode";
                     x.Value = String.Format("{0} -> {1}", minutesToApproxHrMin(minutesLeft), DateTime.Now.AddMinutes(minutesLeft).ToString("h:mm tt"));
                 });
             }
