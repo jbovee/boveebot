@@ -47,28 +47,15 @@ namespace BoveeBot.Modules
         {
             var currentModeInfo = await GetModeInfo();
 
-            var builder = new EmbedBuilder()
-            {
-                Color = new Color(114, 137, 218),
-            };
-            builder.AddField(x => {
-                x.Name = "Current mode";
-                x.Value = currentModeInfo.Mode;
-            });
-            builder.AddField(x => {
-                x.Name = "Matches left";
-                x.Value = currentModeInfo.MatchesLeft;
-            });
+            var msg = $"**Mode and Matches Left**\n" +
+                      $"{currentModeInfo.Mode}\t{currentModeInfo.MatchesLeft}";
             if (!String.Equals(currentModeInfo.Mode, "Tournament"))
             {
                 var minutesLeft = currentModeInfo.MatchesLeft * Double.Parse(_config["avgMatchLength"]);
-                builder.AddField(x => {
-                    x.Name = "Approximate time before next mode";
-                    x.Value = String.Format("{0} -> {1}", minutesToApproxHrMin(minutesLeft), DateTime.Now.AddMinutes(minutesLeft).ToString("h:mm tt"));
-                });
+                msg += $"\n**Approximate time before next mode**\n{String.Format("{0} -> {1}", minutesToApproxHrMin(minutesLeft), DateTime.Now.AddMinutes(minutesLeft).ToString("h:mm tt"))}";
             }
             
-            await ReplyAsync("", false, builder.Build());
+            await ReplyAsync(msg);
         }
 
         private async Task<ModeInfo> GetModeInfo()
