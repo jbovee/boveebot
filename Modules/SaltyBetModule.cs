@@ -48,7 +48,7 @@ namespace BoveeBot.Modules
             var currentModeInfo = await GetModeInfo();
 
             var msg = $"**Mode and Matches Left**\n" +
-                      $"{currentModeInfo.Mode}\t{currentModeInfo.MatchesLeft}";
+                      $"{currentModeInfo.Mode}    {currentModeInfo.MatchesLeft}";
             if (!String.Equals(currentModeInfo.Mode, "Tournament"))
             {
                 var minutesLeft = currentModeInfo.MatchesLeft * Double.Parse(_config["avgMatchLength"]);
