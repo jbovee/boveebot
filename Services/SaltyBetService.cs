@@ -24,7 +24,7 @@ namespace BoveeBot
         private readonly CommandService _commands;
         private readonly IConfigurationRoot _config;
         private readonly IServiceProvider _provider;
-        private Regex untilNextTourneyRegex = new Regex(@"([0-9]{1,3}) more matches until the next tournament", RegexOptions.Compiled);
+        private Regex untilNextTourneyRegex = new Regex(@"Payouts to Team (?:Red|Blue)\. ([0-9]{1,3}) more matches until the next tournament", RegexOptions.Compiled);
         private Regex tourneyStartingRegex = new Regex(@"Tournament will start shortly", RegexOptions.Compiled);
         private ulong channelId = 409517124038426646;
         private string saltyRole = "<@&706951074753544225>";
