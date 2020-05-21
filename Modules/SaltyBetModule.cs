@@ -49,7 +49,10 @@ namespace BoveeBot.Modules
 
             var msg = $"**Mode and Matches Left**\n" +
                       $"{currentModeInfo.Mode}    {currentModeInfo.MatchesLeft}";
-            if (!String.Equals(currentModeInfo.Mode, "Tournament"))
+            if (String.Equals(currentModeInfo.Mode, "Tournament"))
+            {
+                msg += $"\n**{currentModeInfo.TournamentTitle}**";
+            } else
             {
                 var minutesLeft = currentModeInfo.MatchesLeft * Double.Parse(_config["avgMatchLength"]);
                 msg += $"\n**Approximate time before next mode**\n{String.Format("{0} -> {1}", minutesToApproxHrMin(minutesLeft), DateTime.Now.AddMinutes(minutesLeft).ToString("h:mm tt"))}";
@@ -64,19 +67,19 @@ namespace BoveeBot.Modules
             var text = client.DownloadString("https://www.saltybet.com/shaker?bracket=1");
             var context = BrowsingContext.New(Configuration.Default);
             var document = await context.OpenAsync(req => req.Content(text));
+            var title = document.QuerySelectorAll("div#compendiumright strong").FirstOrDefault().TextContent;
             var modeHtml = document.QuerySelectorAll("div#compendiumleft div").LastOrDefault().InnerHtml;
 
             var modeText = modeTextRegex.Match(modeHtml).Value;
-            var numsCheck = numsCheckRegex.Match(modeText);
-            var matchNums = numsCheck.Success ? Int32.Parse(numsCheck.Value) : 1;
 
             var exhibCheck = exhibCheckRegex.Match(modeText);
             var mmCheck = mmCheckRegex.Match(modeText);
             var tourneyCheck = tourneyCheckRegex.Match(modeText);
 
-            if (!String.IsNullOrEmpty(tourneyCheck.Groups[1].Value)) matchNums = 16;
+            var numsCheck = numsCheckRegex.Match(modeText);
+            var matchNums = numsCheck.Success ? Int32.Parse(numsCheck.Value) : !String.IsNullOrEmpty(tourneyCheck.Groups[1].Value) ? 16 : 1;
             var currentMode = exhibCheck.Success ? "Exhibitions" : mmCheck.Success ? "Matchmaking" : tourneyCheck.Success ? "Tournament" : "Unknown";
-            var info = new ModeInfo(currentMode, matchNums, "");
+            var info = new ModeInfo(currentMode, matchNums, title);
             return info;
         }
 
