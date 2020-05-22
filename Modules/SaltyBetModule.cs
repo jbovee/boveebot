@@ -51,7 +51,11 @@ namespace BoveeBot.Modules
                       $"{currentModeInfo.Mode}    {currentModeInfo.MatchesLeft}";
             if (String.Equals(currentModeInfo.Mode, "Tournament"))
             {
-                msg += $"\n**{currentModeInfo.TournamentTitle}**";
+                msg += $"\n**{currentModeInfo.TournamentType}**";
+                if (!String.IsNullOrEmpty(currentModeInfo.TournamentTitle))
+                {
+                    msg += $"\n**{currentModeInfo.TournamentTitle}**";
+                }
             } else
             {
                 var minutesLeft = currentModeInfo.MatchesLeft * Double.Parse(_config["avgMatchLength"]);
@@ -67,7 +71,9 @@ namespace BoveeBot.Modules
             var text = client.DownloadString("https://www.saltybet.com/shaker?bracket=1");
             var context = BrowsingContext.New(Configuration.Default);
             var document = await context.OpenAsync(req => req.Content(text));
-            var title = document.QuerySelectorAll("div#compendiumright strong").FirstOrDefault().TextContent;
+            var tournamentTypeRaw = document.QuerySelectorAll("div#compendiumright strong").FirstOrDefault().TextContent;
+            var type = Regex.Match(tournamentTypeRaw, @"(\w+(?: \w+)?) Tournament Bracket").Groups[1].Value;
+            var title = String.Equals(type, "Custom") ? document.QuerySelectorAll("div#compendiumright span").LastOrDefault().TextContent : "";
             var modeHtml = document.QuerySelectorAll("div#compendiumleft div").LastOrDefault().InnerHtml;
 
             var modeText = modeTextRegex.Match(modeHtml).Value;
@@ -79,7 +85,7 @@ namespace BoveeBot.Modules
             var numsCheck = numsCheckRegex.Match(modeText);
             var matchNums = numsCheck.Success ? Int32.Parse(numsCheck.Value) : !String.IsNullOrEmpty(tourneyCheck.Groups[1].Value) ? 16 : 1;
             var currentMode = exhibCheck.Success ? "Exhibitions" : mmCheck.Success ? "Matchmaking" : tourneyCheck.Success ? "Tournament" : "Unknown";
-            var info = new ModeInfo(currentMode, matchNums, title);
+            var info = new ModeInfo(currentMode, matchNums, type, title);
             return info;
         }
 
