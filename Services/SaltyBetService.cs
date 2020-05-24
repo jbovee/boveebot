@@ -102,8 +102,14 @@ namespace BoveeBot
                         var tourneyInfo = await GetModeInfo();
                         var chnl = _discord.GetChannel(channelId) as IMessageChannel;
                         var tourneyMsg = $"{saltyRole} Tournament starting soon! **{tourneyInfo.TournamentType}**";
-                        if (!String.IsNullOrEmpty(tourneyInfo.TournamentTitle)) tourneyMsg += $" **{tourneyInfo.TournamentTitle}**";
+                        if (!String.IsNullOrEmpty(tourneyInfo.TournamentTitle)) tourneyMsg += $" - **{tourneyInfo.TournamentTitle}**";
+
+                        var saltyLinks = new EmbedBuilder
+                        {
+                            Description = "[SaltyBet](https://www.saltybet.com/) | [Bracket](https://www.saltybet.com/shaker?bracket=1)"
+                        }.Build();
                         await chnl.SendMessageAsync(tourneyMsg);
+                        await chnl.SendMessageAsync(embed: saltyLinks);
                     }
                     break;
             }
@@ -117,7 +123,7 @@ namespace BoveeBot
             var document = await context.OpenAsync(req => req.Content(text));
             var tournamentTypeRaw = document.QuerySelectorAll("div#compendiumright strong").FirstOrDefault().TextContent;
             var type = Regex.Match(tournamentTypeRaw, @"(\w+(?:\s\w+)?) Tournament Bracket").Groups[1].Value;
-            var title = String.Equals(type, "Custom") ? document.QuerySelectorAll("div#compendiumright span").LastOrDefault().TextContent : "";
+            var title = String.Equals(type, "Custom") ? document.QuerySelectorAll("div#compendiumright span.goldtext").FirstOrDefault().TextContent : "";
             var modeHtml = document.QuerySelectorAll("div#compendiumleft div").LastOrDefault().InnerHtml;
 
             var modeText = modeTextRegex.Match(modeHtml).Value;
